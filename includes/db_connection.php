@@ -4,4 +4,3 @@ $dsn = 'mysql:host=localhost;dbname=overlandoo';
 // $dsn = 'sqlite:C:/xampp/htdocs/oophp/sqlite/oophp.db';
 
 $db = new PDO($dsn, 'overlandooAdmin', 'passpass');
-

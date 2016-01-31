@@ -28,7 +28,7 @@ if (isset($_POST['submit'])) {
   } catch (Exception $e) {
       $error = $e->getMessage();
   }
-
+  
   if ($affected) {
     // Success
     $_SESSION["message"] = "{$affected} user created with ID " . $db->lastInsertId();

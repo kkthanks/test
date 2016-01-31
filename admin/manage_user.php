@@ -1,15 +1,11 @@
 <?php require_once("../includes/session.php"); ?>
 <?php require_once("../includes/db_connection.php"); ?>
 <?php require_once("../includes/functions.php"); ?>
+<?php require_once("../includes/class.User.inc"); ?>
 
-<?php
-try {
-    $sql = 'SELECT `id`, `user_name`, `pass`, `first_name`, `last_name`, `email`, `age`, `gender`, `avatar`, `status`, `countries_travelled`, `currently_at`, `subscription_id`, `user_info_id` FROM `user` 
-            ORDER BY id';
-    $result = $db->query($sql);
-} catch (Exception $e) {
-}
-?>
+<!-- ************************************************* -->
+
+<?php $user_set = User::find_all(); ?>
 
 <?php $layout_context = "admin"; ?>
 <?php include("../includes/layouts/header.php"); ?>
@@ -32,12 +28,14 @@ try {
         <th>Gender</th>
         <th>Avatar</th>
         <th>Status</th>
+        <th>Contributed Routes</th>
+        <th>Badges</th>
         <th>Countries Travelled</th>
         <th>Currently At</th>
         <th>Sub ID</th>
         <th>Info ID</th>
     </tr>
-    <?php while ($row = $result->fetch()) { ?>
+    <?php while ($row = $user_set->fetch()) { ?>
     <tr>
         <td><?php echo $row['id']; ?></td>
         <td><?php echo $row['user_name']; ?></td>
@@ -49,6 +47,8 @@ try {
         <td><?php echo $row['gender']; ?></td>
         <td><?php echo $row['avatar']; ?></td>
         <td><?php echo $row['status']; ?></td>
+        <td><?php echo $row['contributed_route']; ?></td>
+        <td><?php echo $row['badges']; ?></td>
         <td><?php echo $row['countries_travelled']; ?></td>
         <td><?php echo $row['currently_at']; ?></td>
         <td><?php echo $row['subscription_id']; ?></td>
@@ -58,4 +58,17 @@ try {
 </table>
 <a href="add_user.php">Add User</a>
 <br />
+<?php
+
+echo "<br />";
+$found_user = User::find_by_id(4);
+
+echo var_dump($found_user);
+echo "<pre>";
+print_r($found_user['']);
+echo "</pre>";
+echo "<br />";
+echo User::find_by_id(4)['user_name'];
+
+?>
 <?php include("../includes/layouts/footer.php"); ?>

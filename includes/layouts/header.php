@@ -1,6 +1,6 @@
 <?php 
 	if (!isset($layout_context)) {
-		$layout_context = "public";
+		$layout_context = "member";
 	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -9,7 +9,7 @@
 <html lang="en">
 	<head>
 		<title>Overlandoo <?php if ($layout_context == "admin") { echo "Admin"; } ?></title>
-		<link href="../public/stylesheets/styles.css" rel="stylesheet" type="text/css">
+		<link href="../member/stylesheets/styles.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
     <div id="header">
