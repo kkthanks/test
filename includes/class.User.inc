@@ -4,8 +4,23 @@ require_once("db_connection.php");
 class User {
 
 	//need to query through sql to get everything out into an array then populate into the variables
-	private $user_name = "";
-	private $pass = "";
+	private $id;
+	private $user_name;
+	private $pass;
+	private $first_name;
+	private $last_name;
+	private $email;
+	private $age;
+	private $gender;
+	private $avatar;
+	private $status;
+	private $contributed_route;
+	private $badges;
+	private $countries_travelled;
+	private $currently_at;
+	private $subscription_id;
+	private $user_info_id;
+
 
 	static protected $total_users = 0;
 
@@ -57,6 +72,34 @@ class User {
 			$error = $e->getMessage();
 		}
 	}
+	/**
+	 * takes a record and loops through all the attributes stored to return a new User object with attributes attached
+	 * @param  [sql record] $record [sql record from find_by_sql, find_all or find_by_id]
+	 * @return [object]         [with all the attributes attached]
+	 * it does: $object = new self;
+	 * 					$object->user_name = $record['user_name']
+	 *      		$object->pass = $record['pass']
+	 *        	return $object;
+	 */
+	private static function instantiate($record) {
+		$object = new self;
+		foreach ($record as $attribute => $value) {
+			if($object->has_attribute($attribute)) {
+				$object->$attribute = $value;
+			}
+		}
+		return $object;
+	}
+
+	/**
+	 * finds out of the object has attributes (private ones included) associated with it
+	 * @return boolean [yes or no]
+	 */
+	private function has_attribute() {
+		$object_vars = get_object_vars($this);
+		return array_key_exists($attribute, $object_vars);
+	}
+
 
 	public static function add_user() {
 	}

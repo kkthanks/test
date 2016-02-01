@@ -58,17 +58,5 @@
 </table>
 <a href="add_user.php">Add User</a>
 <br />
-<?php
 
-echo "<br />";
-$found_user = User::find_by_id(4);
-
-echo var_dump($found_user);
-echo "<pre>";
-print_r($found_user['']);
-echo "</pre>";
-echo "<br />";
-echo User::find_by_id(4)['user_name'];
-
-?>
 <?php include("../includes/layouts/footer.php"); ?>
