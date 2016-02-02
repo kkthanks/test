@@ -3,7 +3,8 @@ require_once(LIB_PATH.DS.'db_connection.php');
 
 class User extends DatabaseObject {
 
-	//need to query through sql to get everything out into an array then populate into the variables
+	protected static $table_name = "user";
+
 	public $id;
 	public $user_name;
 	public $pass;
@@ -29,57 +30,6 @@ class User extends DatabaseObject {
 	// 	$this->$pass = "";
 	// 	User::$total_users++;
 	// }
-
-
-	/**
-	 * [find_by_sql description]
-	 * @param  string $sql [sql statement]
-	 * @return [object]      [an array of objects]
-	 */
-	public static function find_by_sql($sql="") {
-		try {
-			global $db;
-			$result_set = $db->query($sql);
-			//stores PDO error inside $error. if there is error, return error, if not execute fetch
-			$errorInfo = $db->errorInfo();
-			if (isset($errorInfo[2])) {
-				$error = $errorInfo[2];
-				return $error;
-	    }	else { //fetches all of whatever sql is given into an array of objects
-				$object_array = $result_set->fetchAll(PDO::FETCH_OBJ);
-				return $object_array;				
-			}
-		} catch (Exception $e) {
-			$error = $e->getMessage();
-		}
-	}
-
-
-	/**
-	 * precesses sql statement by find_by_sql function from above
-	 * @return PDO object that has to run through a while loop and using ->fetch
-	 * eg: <?php while ($row = $User::find_all()->fetch()) { ?>
-	 */
-	
-	public static function find_all() {
-			$user_set = self::find_by_sql("SELECT * FROM user");
-			return $user_set;
-	}
-
-
-	/**
-	 * find user based on id
-	 * @param  integer $id user id
-	 * @return [pdo array object] [the array of that specific (by id) user set]
-	 * eg: echo User::find_by_id(4)['user_name'] 
-	 */
-	
-	public static function find_by_id($id=0) {
-		global $db;
-			$result_array = self::find_by_sql("SELECT * FROM user WHERE id = {$id} LIMIT 1");
-			return !empty($result_array) ? array_shift($result_array) : false;
-	}
-
 
 	/**
 	 * takes a record and loops through all the attributes stored to return a new User object with attributes attached
@@ -110,16 +60,6 @@ class User extends DatabaseObject {
 		$result_array = self::find_by_sql($sql);
 		return !empty($result_array) ? array_shift($result_array) : false;
 	}
-
-	/**
-	 * finds out of the object has attributes (private ones included) associated with it
-	 * @return boolean [yes or no]
-	 */
-	private function has_attribute($attribute) {
-		$object_vars = get_object_vars($this);
-		return array_key_exists($attribute, $object_vars);
-	}
-
 
 	public static function add_user() {
 	}
