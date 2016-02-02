@@ -1,7 +1,7 @@
 <?php
-require_once("db_connection.php");
+require_once(LIB_PATH.DS.'db_connection.php');
 
-class User {
+class User extends DatabaseObject {
 
 	//need to query through sql to get everything out into an array then populate into the variables
 	public $id;
@@ -97,6 +97,19 @@ class User {
 	// 	$object = new self;
 	// 	return $object;
 	// }
+
+	public static function authenticate($username="", $password="") {
+		global $db;
+		// $username = $db->username;
+		// $password = $db->pass;
+
+		$sql  = "SELECT * FROM user ";
+		$sql .= "WHERE user_name = '{$username}' ";
+		$sql .= "AND pass = '{$password}' ";
+		$sql .= "LIMIT 1";
+		$result_array = self::find_by_sql($sql);
+		return !empty($result_array) ? array_shift($result_array) : false;
+	}
 
 	/**
 	 * finds out of the object has attributes (private ones included) associated with it

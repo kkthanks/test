@@ -1,11 +1,8 @@
-<?php require_once("../includes/session.php"); ?>
-<?php require_once("../includes/db_connection.php"); ?>
-<?php require_once("../includes/functions.php"); ?>
-<?php require_once("../includes/class.User.inc"); ?>
+<?php require_once("../includes/initialise.php"); ?>
 
 <!-- ************** PAGE START ********************** -->
 <?php $layout_context = "admin"; ?>
-<?php include("../includes/layouts/header.php"); ?>
+<?php Layout::include_header_layout('admin'); ?>
 
 <h1>Manage Users</h1>
 
@@ -56,6 +53,6 @@
 <br />
 
 <?php if (isset($error)) {echo "<p>$error</p>";} ?>
-<?php echo message(); ?><br />
+<?php echo output_message(); ?><br />
 
-<?php include("../includes/layouts/footer.php"); ?>
+<?php Layout::include_footer_layout('admin'); ?>

@@ -1,6 +1,5 @@
-<?php require_once("../includes/session.php"); ?>
-<?php require_once("../includes/db_connection.php"); ?>
-<?php require_once("../includes/functions.php"); ?>
+<?php require_once("../includes/initialise.php"); ?>
+
 <?php
 if (isset($_POST['submit'])) {
 
@@ -43,10 +42,11 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
+<!-- ************** PAGE START ********************** -->
 <?php $layout_context = "admin"; ?>
-<?php include("../includes/layouts/header.php"); ?>
+<?php Layout::include_header_layout('admin'); ?>
 
-<?php echo message(); ?>
+<?php echo output_message(); ?>
 
 <h1>Add a user</h1>
 
@@ -95,4 +95,4 @@ if (isset($_POST['submit'])) {
 <a href="manage_user.php">Manage User</a>
 
 <br />
-<?php include("../includes/layouts/footer.php"); ?>
+<?php Layout::include_footer_layout('admin'); ?>

@@ -9,9 +9,9 @@
 <html lang="en">
 	<head>
 		<title>Overlandoo <?php if ($layout_context == "admin") { echo "Admin"; } ?></title>
-		<link href="../member/stylesheets/styles.css" rel="stylesheet" type="text/css">
+		<link href="../stylesheets/styles.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
     <div id="header">
-      <h1>Overlandoo <?php if ($layout_context == "admin") { echo "Admin"; } ?></h1>
+      <h1>Overlandoo Public<?php if ($layout_context == "admin") { echo "Admin"; } ?></h1>
     </div>
