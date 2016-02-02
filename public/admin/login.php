@@ -1,7 +1,6 @@
 <?php
 require_once("../../includes/initialise.php");
 
-
 if($session->is_logged_in()) {
   redirect_to("index.php");
 }
@@ -17,6 +16,8 @@ if (isset($_POST['submit'])) { // Form has been submitted.
 	
   if ($found_user) {
     $session->login($found_user);
+    // log loggin action in Log folder with 'a' append method
+    Logger::log_action("Login", "{$username} logged in");
     redirect_to("index.php");
   } else {
     // username/password combo was not found in the database
