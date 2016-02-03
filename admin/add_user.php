@@ -3,7 +3,7 @@
 <?php
 if (isset($_POST['submit'])) {
 
-  try {
+    try {
 
         $user_name = $_POST["user_name"];
         $pass = $_POST["pass"];
@@ -24,21 +24,21 @@ if (isset($_POST['submit'])) {
         $query .= ")";
         $affected = $db->exec($query);
 
-  } catch (Exception $e) {
-      $error = $e->getMessage();
-  }
-  
-  if ($affected) {
-    // Success
-    $_SESSION["message"] = "{$affected} user created with ID " . $db->lastInsertId();
-    redirect_to("manage_user.php");
-  } else {
-    // Failure
-    $_SESSION["message"] = "User creation failed.";
-    if (isset($error)) {
-    echo $error;
+    } catch (Exception $e) {
+        $error = $e->getMessage();
     }
-  }
+  
+    if ($affected) {
+    // Success
+        $_SESSION["message"] = "{$affected} user created with ID " . $db->lastInsertId();
+        redirect_to("manage_user.php");
+    } else {
+    // Failure
+        $_SESSION["message"] = "User creation failed.";
+        if (isset($error)) {
+            echo $error;
+        }
+    }
 }
 ?>
 

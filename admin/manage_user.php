@@ -25,9 +25,9 @@
         <th>Sub ID</th>
         <th>Info ID</th>
     </tr>
-    <?php 
+    <?php
     $users = User::find_all();
-    foreach ($users as $user) { 
+    foreach ($users as $user) {
     ?>
     <tr>
         <td><?php echo $user->id; ?></td>

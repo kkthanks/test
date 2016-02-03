@@ -1,32 +1,32 @@
 <?php
 require_once("../../includes/initialise.php");
 
-if($session->is_logged_in()) {
-  redirect_to("index.php");
+if ($session->is_logged_in()) {
+    redirect_to("index.php");
 }
 
 // from the form's submit tag name
 if (isset($_POST['submit'])) { // Form has been submitted.
 
-  $username = trim($_POST['username']);
-  $password = trim($_POST['password']);
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
   
   // Check database to see if username/password exist.
-	$found_user = User::authenticate($username, $password);
-	
-  if ($found_user) {
-    $session->login($found_user);
+    $found_user = User::authenticate($username, $password);
+
+    if ($found_user) {
+        $session->login($found_user);
     // log loggin action in Log folder with 'a' append method
-    Logger::log_action("Login", "{$username} logged in");
-    redirect_to("index.php");
-  } else {
+         Logger::logAction("Login", "{$username} logged in");
+         redirect_to("index.php");
+    } else {
     // username/password combo was not found in the database
-    $message = "Username/password combination incorrect.";
-  }
+          $message = "Username/password combination incorrect.";
+    }
   
 } else { // Form has not been submitted.
-  $username = "";
-  $password = "";
+    $username = "";
+    $password = "";
 }
 
 ?>

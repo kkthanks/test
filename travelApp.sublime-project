@@ -4,11 +4,5 @@
 		{
 			"path": "."
 		}
-	],
-
-    "settings": {
-      "xdebug": {
-           "url": "http://localhost/overlandoo/admin/manage_user.php",
-      }
-  }
+	]
 }
