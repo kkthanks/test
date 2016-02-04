@@ -57,7 +57,7 @@ class DatabaseObject
      * finds out of the object has attributes (private ones included) associated with it
      * @return boolean [yes or no]
      */
-    private function has_attribute($attribute)
+    private function hasAttribute($attribute)
     {
         $object_vars = $this->attributes();
         return array_key_exists($attribute, $object_vars);
@@ -79,36 +79,64 @@ class DatabaseObject
     }
 
     /**
+     * NOT NEEDED FOR PDO WITH PREPARED STATEMENTS
      * sanitize the values to make it safe for sql before submitting
      * does not alter the actual value of each attribute
      * Returns a quoted string that is theoretically safe to pass into an SQL statement. Returns FALSE if the driver does not support quoting in this way
      * @return [assoc array] [safe for sql]
      */
-    public function sanitizedAttributes()
+    // public function sanitizedAttributes()
+    // {
+    //     global $db;
+    //     $clean_attributes = array();
+    //     foreach ($this->attributes() as $key => $value) {
+    //         $clean_attributes[$key] = "dd" . $value;
+    //     }
+    //     return $clean_attributes;
+    // }
+
+    /**
+     * preps the normal array into the string format PDO wants for prepared statements
+     * @return [string] [gets array from db_fields in class and joins them together]
+     */
+    protected function fieldsToPrep()
     {
-        global $db;
-        $clean_attributes = array();
-        foreach ($this->attributes() as $key => $value) {
-            $clean_attributes[$key] = $db->quote($value);
+        $db_fields = static::$db_fields;
+        $formula = array();
+        foreach ($db_fields as $value) {
+            $formula[] = "$value=:$value";
         }
-        return $clean_attributes;
+        $joined = join(", ", $formula);
+        return $joined;
     }
 
     /**
-     * might wana move all of these up into database object class eventually
-     * @return [creation of new user with POST data]
+     * change a normal assoc array into the [:key => $this->value] format for PDO prepared statements.
+     * at the same time it binds the instance values to the keys
+     * @return [modified assoc array] [loops through $db_fields and returns modification]
      */
+    protected function modifiedArray()
+    {
+        $modified_array = array();
+        foreach (static::$db_fields as $value) {
+            $modified_array[":{$value}"] = $this->$value;
+        }
+        return $modified_array;
+    }
+
     public function create()
     {
         global $db;
         $attributes = $this->attributes();
 
-        $query  = "INSERT INTO ".static::$table_name." (";
-        $query .= join(", ", array_keys($attributes));
-        $query .= ") VALUES ('";
-        $query .= join("', '", array_values($attributes));
-        $query .= "')";
-        $affected = $db->exec($query);
+        $statement  = "INSERT INTO ".static::$table_name." (";
+        $statement .= join(", ", array_keys($attributes));
+        $statement .= ") VALUES (:";
+        $statement .= join(", :", array_keys($attributes));
+        $statement .= ")";
+        $prepared = $db->prepare($statement);
+
+        $affected = $prepared->execute($this->modifiedArray());
         if ($affected) {
             $this->id = $db->lastInsertId();
             return $affected;
@@ -120,16 +148,31 @@ class DatabaseObject
     public function update()
     {
         global $db;
-        $attributes = $this->attributes();
-        $attribute_pairs = array();
-        foreach ($attributes as $key => $value) {
-            $attribute_pairs[] = "{$key}='{$value}'";
-        }
 
-        $query  = "UPDATE ".static::$table_name." SET ";
-        $query .= join(", ", $attribute_pairs);
-        $query .= " WHERE id=". $this->id;
-        $affected = $db->exec($query);
+        $statement  = "UPDATE ".static::$table_name." SET ";
+        $statement .= $this->fieldsToPrep();
+        $statement .= " WHERE id=:id";
+        $prepared = $db->prepare($statement);
+
+        /**
+         * using bind values method: for controlling all the database inputs by PDO params
+         */
+        // $prepared->bindValue(':id', $this->id, PDO::PARAM_INT);
+        // $prepared->bindValue(':user_name', $this->user_name, PDO::PARAM_STR);
+        // $prepared->bindValue(':pass', $this->pass, PDO::PARAM_STR);
+        // $prepared->bindValue(':first_name', $this->first_name, PDO::PARAM_STR);
+        // $prepared->bindValue(':last_name', $this->last_name, PDO::PARAM_STR);
+        // $prepared->bindValue(':email', $this->email, PDO::PARAM_STR);
+        // $prepared->bindValue(':age', $this->age, PDO::PARAM_INT);
+        // $prepared->bindValue(':gender', $this->gender, PDO::PARAM_STR);
+        // $prepared->bindValue(':avatar', $this->avatar, PDO::PARAM_STR);
+        // $prepared->bindValue(':status', $this->status, PDO::PARAM_STR);
+        // $prepared->bindValue(':countries_travelled', $this->countries_travelled, PDO::PARAM_INT);
+        // $prepared->bindValue(':currently_at', $this->currently_at, PDO::PARAM_STR);
+
+        // $affected = $prepared->execute();
+        // looping through bind values prepared earlier instead, but without giving specific PDO params
+        $affected = $prepared->execute($this->modifiedArray());
         if ($affected) {
             return $affected;
         } else {
@@ -150,11 +193,14 @@ class DatabaseObject
     public function delete()
     {
         global $db;
-        $query  = "DELETE FROM ".static::$table_name." ";
-        $query .= "WHERE id=". $this->id;
-        $query .= " LIMIT 1";
+        $statement  = "DELETE FROM ".static::$table_name." ";
+        $statement .= "WHERE id=:id";
+        $statement .= " LIMIT 1";
 
-        $affected = $db->exec($query);
+        $prepared = $db->prepare($statement);
+        $prepared->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        $affected = $prepared->execute();
         if ($affected) {
             return $affected;
         } else {
