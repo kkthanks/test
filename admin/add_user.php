@@ -1,39 +1,35 @@
 <?php require_once("../includes/initialise.php"); ?>
-
-<?php
+<?php //** really cannot have any white spaces here, no line breaks, no spaces for redirect to work **
 if (isset($_POST['submit'])) {
-
+    
     try {
 
-        $user_name = $_POST["user_name"];
-        $pass = $_POST["pass"];
-        $first_name = $_POST["first_name"];
-        $last_name = $_POST["last_name"];
-        $email = $_POST["email"];
-        $age = $_POST["age"];
-        $gender = $_POST["gender"];
-        $avatar = $_POST["avatar"];
-        $status = $_POST["status"];
-        $countries_travelled = $_POST["countries_travelled"];
-        $currently_at = $_POST["currently_at"];
-      
-        $query  = "INSERT INTO user (";
-        $query .= "  user_name, pass, first_name, last_name, email, age, gender, avatar, status, countries_travelled, currently_at";
-        $query .= ") VALUES (";
-        $query .= "  '{$user_name}', '{$pass}', '{$first_name}', '{$last_name}', '{$email}', {$age}, '{$gender}', '{$avatar}', '{$status}', {$countries_travelled}, '{$currently_at}'";
-        $query .= ")";
-        $affected = $db->exec($query);
+        $user = new User();
+
+        $user->user_name = $_POST["user_name"];
+        $user->pass = $_POST["pass"];
+        $user->first_name = $_POST["first_name"];
+        $user->last_name = $_POST["last_name"];
+        $user->email = $_POST["email"];
+        $user->age = $_POST["age"];
+        $user->gender = $_POST["gender"];
+        $user->avatar = $_POST["avatar"];
+        $user->status = $_POST["status"];
+        $user->countries_travelled = $_POST["countries_travelled"];
+        $user->currently_at = $_POST["currently_at"];
+
+        $affected = $user->create();
 
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
   
     if ($affected) {
-    // Success
+    //Success
         $_SESSION["message"] = "{$affected} user created with ID " . $db->lastInsertId();
         redirect_to("manage_user.php");
     } else {
-    // Failure
+    //Failure
         $_SESSION["message"] = "User creation failed.";
         if (isset($error)) {
             echo $error;

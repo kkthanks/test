@@ -5,6 +5,8 @@ class User extends DatabaseObject
 {
 
     protected static $table_name = "user";
+    // only included the db fields that are used in form submission
+    protected static $db_fields = array('id', 'user_name', 'pass', 'first_name', 'last_name', 'email', 'age', 'gender', 'avatar', 'status', 'countries_travelled', 'currently_at');
 
     public $id;
     public $user_name;
@@ -37,11 +39,11 @@ class User extends DatabaseObject
      * @param  [sql record] $record [sql record from find_by_sql, find_all or find_by_id]
      * @return [object]         [with all the attributes attached]
      * it does:
-        // $object->id                 = $record['id'];
-        // $object->username     = $record['username'];
-        // $object->password     = $record['password'];
-        // $object->first_name = $record['first_name'];
-        // $object->last_name     = $record['last_name'];
+         *$object->id                 = $record['id'];
+         *$object->username     = $record['username'];
+         *$object->password     = $record['password'];
+         *$object->first_name = $record['first_name'];
+         *$object->last_name     = $record['last_name'];
      * in the end i never use this because PDO helped me with the instantiation so not sure if this function is still in need
      */
     // private static function instantiate($record) {
@@ -61,17 +63,5 @@ class User extends DatabaseObject
         $sql .= "LIMIT 1";
         $result_array = self::find_by_sql($sql);
         return !empty($result_array) ? array_shift($result_array) : false;
-    }
-
-    public static function add_user()
-    {
-    }
-
-    static function edit_user()
-    {
-    }
-
-    static function remove_user()
-    {
     }
 }

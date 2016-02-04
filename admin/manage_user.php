@@ -4,6 +4,9 @@
 <?php $layout_context = "admin"; ?>
 <?php Layout::include_header_layout('admin'); ?>
 
+<?php if (isset($error)) {echo "<p>$error</p>";} ?>
+<?php echo output_message(); ?><br />
+
 <h1>Manage Users</h1>
 
 <table>
@@ -24,6 +27,8 @@
         <th>Currently At</th>
         <th>Sub ID</th>
         <th>Info ID</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
     <?php
     $users = User::find_all();
@@ -46,13 +51,13 @@
         <td><?php echo $user->currently_at; ?></td>
         <td><?php echo $user->subscription_id; ?></td>
         <td><?php echo $user->user_info_id; ?></td>
+        <td><a href="edit_user.php?id=<?php echo $user->id ?>">Edit</a></td>
+        <td><a href="delete_user.php?id=<?php echo $user->id ?>">Delete</a></td>
     </tr>
     <?php } ?>
 </table>
 <a href="add_user.php">Add User</a>
 <br />
 
-<?php if (isset($error)) {echo "<p>$error</p>";} ?>
-<?php echo output_message(); ?><br />
 
 <?php Layout::include_footer_layout('admin'); ?>

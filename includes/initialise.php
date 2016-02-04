@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // load core paths definition first
 require_once('core_paths.php');
