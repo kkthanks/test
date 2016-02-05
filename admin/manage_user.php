@@ -31,7 +31,7 @@
         <th>Delete</th>
     </tr>
     <?php
-    $users = User::find_all();
+    $users = User::findAll();
     foreach ($users as $user) {
     ?>
     <tr>
@@ -57,6 +57,7 @@
     <?php } ?>
 </table>
 <a href="add_user.php">Add User</a>
+<a href="../public/admin/login.php">Back to Login</a> 
 <br />
 
 

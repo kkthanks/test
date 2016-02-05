@@ -22,8 +22,8 @@ function __autoload($class_name)
 // just a function to store any messages
 function output_message($message = "")
 {
-    if (!empty($_SESSION["message"])) {
-        return "<p class=\"message\">{$_SESSION["message"]}</p>";
+    if (!empty($message)) {
+        return "<p>{$message}</p>";
     } else {
         return "";
     }

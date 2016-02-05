@@ -7,11 +7,11 @@ class DatabaseObject
     protected static $table_name;
 
     /**
-     * [find_by_sql description]
+     * [creates objects as an sql is passed in it]
      * @param  string $sql [sql statement]
      * @return [object]      [an array of objects of the child class]
      */
-    public static function find_by_sql($sql = "")
+    public static function findBySql($sql = "")
     {
         try {
             global $db;
@@ -31,26 +31,35 @@ class DatabaseObject
     }
 
     /**
-     * precesses sql statement by find_by_sql function from above
+     * precesses sql statement by findBySql function from above
      * @return PDO object that has to run through a while loop and using ->fetch
-     * eg: <?php while ($row = $User::find_all()->fetch()) { ?>
+     * eg: <?php while ($row = $User::findAll()->fetch()) { ?>
      */
-    public static function find_all()
+    public static function findAll()
     {
-            $user_set = static::find_by_sql("SELECT * FROM ".static::$table_name);
-            return $user_set;
+        $user_set = static::findBySql("SELECT * FROM ".static::$table_name);
+        return $user_set;
     }
 
     /**
      * find user based on id
      * @param  integer $id user id
      * @return [pdo array object] [the array of that specific (by id) user set]
-     * eg: echo User::find_by_id(4)['user_name']
+     * eg: echo User::findById(4)['user_name']
      */
-    public static function find_by_id($id = 0)
+    public static function findById($id = 0) // will eventually have to change all above to prepared statements. waiting on more find bys to see if there is a pattern...
     {
-            $result_array = static::find_by_sql("SELECT * FROM " .static::$table_name." WHERE id = {$id} LIMIT 1");
-            return !empty($result_array) ? array_shift($result_array) : false;
+        global $db;
+        $statement  = "SELECT * FROM ".static::$table_name." ";
+        $statement .= "WHERE id=:id";
+        $statement .= " LIMIT 1";
+        $prepared = $db->prepare($statement);
+        $prepared->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $prepared->execute();
+        $rows = $prepared->fetchAll(PDO::FETCH_CLASS, static::class);
+
+        return !empty($rows) ? array_shift($rows) : false;
     }
 
     /**
@@ -77,23 +86,6 @@ class DatabaseObject
         }
         return $attributes;
     }
-
-    /**
-     * NOT NEEDED FOR PDO WITH PREPARED STATEMENTS
-     * sanitize the values to make it safe for sql before submitting
-     * does not alter the actual value of each attribute
-     * Returns a quoted string that is theoretically safe to pass into an SQL statement. Returns FALSE if the driver does not support quoting in this way
-     * @return [assoc array] [safe for sql]
-     */
-    // public function sanitizedAttributes()
-    // {
-    //     global $db;
-    //     $clean_attributes = array();
-    //     foreach ($this->attributes() as $key => $value) {
-    //         $clean_attributes[$key] = "dd" . $value;
-    //     }
-    //     return $clean_attributes;
-    // }
 
     /**
      * preps the normal array into the string format PDO wants for prepared statements

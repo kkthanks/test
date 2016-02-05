@@ -4,7 +4,7 @@ if (isset($_POST['submit'])) {
     
     try {
 
-        $user = User::find_by_id($_GET['id']);
+        $user = User::findById($_GET['id']);
 
         $user->user_name = $_POST["user_name"];
         $user->pass = $_POST["pass"];
@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
 
 <?php echo output_message(); ?>
 
-<?php $user = User::find_by_id($_GET['id']); ?>
+<?php $user = User::findById($_GET['id']); ?>
 
 <h1>Edit user</h1>
 

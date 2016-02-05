@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
         $user->email = $_POST["email"];
         $user->age = $_POST["age"];
         $user->gender = $_POST["gender"];
-        $user->avatar = $_POST["avatar"];
+        $user->avatar = "default.jpg";
         $user->status = $_POST["status"];
         $user->countries_travelled = $_POST["countries_travelled"];
         $user->currently_at = $_POST["currently_at"];
@@ -71,9 +71,6 @@ if (isset($_POST['submit'])) {
         <option value="female">Female</option>
         <option value="complicated">Complicated</option>
       </select>
-      </p>
-      <p>Avatar:
-        <input type="text" name="avatar" value="" />
       </p>
       <p>Status:
         <input type="text" name="status" value="" />

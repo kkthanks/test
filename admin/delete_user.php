@@ -1,7 +1,7 @@
 <?php
 require_once("../includes/initialise.php");
 
-$user = User::find_by_id($_GET['id']);
+$user = User::findById($_GET['id']);
 
 $affected = $user->delete();
 

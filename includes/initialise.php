@@ -15,6 +15,7 @@ require_once(LIB_PATH.DS.'class.DatabaseObject.inc');
 
 // load database-related classes
 require_once(LIB_PATH.DS.'class.User.inc');
+require_once(LIB_PATH.DS.'class.Upload.inc');
 
 //load other classes
 require_once(LIB_PATH.DS.'class.Layout.inc');
